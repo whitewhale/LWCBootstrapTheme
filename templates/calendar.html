@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8" />
+		<meta http-equiv="Cache-control" content="public">
+		<title>test</title>
+	</head>
+	<body>
+<div id="lw_cal_js_templates">
+<script id="lw_cal_day_template" type="text/template">
+    <div id="lw_cal_day_leftcol">
+        <div id="lw_cal_day_date">
+            <span class="lw_cal_today_month">{{ month }}</span>
+            <span class="lw_cal_today_day">{{ day }}</span>
+        </div>
+
+        {[ if (obj.weather) { ]}
+            <div id="lw_cal_weather">
+                Weather in {{ weather.location }}:<br /> 
+                <span>{{ weather.description }}</span>
+            </div>
+        {[ } ]}
+
+        <div id="lw_cal_today_facts">
+            {{ today_facts }}
+        </div>
+    </div>
+    <div id="lw_cal_day_rightcol">
+        <div class="lw_cal_event_list">
+            {{ events }}
+        </div>
+        {[ if (obj.upcoming_events) { ]}
+        <div class="lw_cal_upcoming_events">
+            <h3>Upcoming Featured Events</h3>
+            <div class="lw_cal_event_list">
+                {{ upcoming_events }}
+            </div>
+        </div>
+        {[ } ]}
+
+    </div>
+</script>
+<script id="lw_cal_list_template" type="text/template">
+    <h3>{{ date }}</h3>
+    <div>
+        <div class="lw_cal_event_list">
+            {{ events }}
+        </div>
+    </div>
+</script>
+<script id="lw_cal_month_template" type="text/template">
+    <table id="lw_cal_month_table" cellpadding="0" cellspacing="0" class="lw_cal_borders">
+        <tbody>
+			<tr>{{ week_days }}</tr>
+            {{ days }}
+        </tbody>
+    </table>
+</script>
+<script id="lw_cal_month_day_template" type="text/template">
+    <td class="{{ class_name }}">
+        <span class="lw_cal_date">
+            <a href="#view/day/date/{{ date }}">{{ day }}</a>
+            <span class="lw_cal_month_week_day lw_hidden">{{ day_of_week }}</span>
+        </span>
+        <div class="lw_cal_event_list">
+                {{ events }}
+        </div>
+    </td>
+</script>
+<script id="lw_cal_mini_cal_template" type="text/template">
+    <h3>
+        <a href="#" class="lw_left"><span class="icon-lg icon-chevron-circle-left"></span></a>
+        <span>{{ mini_cal_header }}</span>
+        <a href="#" class="lw_right"><span class="icon-lg icon-chevron-circle-right"></span></a>
+    </h3>
+    <table>
+        <thead>
+            <th>S<span>un</span></th>
+            <th>M<span>on</span></th>
+            <th>T<span>ue</span></th>
+            <th>W<span>ed</span></th>
+            <th>T<span>hu</span></th>
+            <th>F<span>ri</span></th>
+            <th>S<span>at</span></th>
+        </thead>
+        <tbody>{{ mini_cal_body }}</tbody>
+    </table>
+    <div class="lw_week_select" style="display: none;"><div>&gt;</div></div>
+</script>
+<script id="lw_cal_event_template" type="text/template">
+	<div class="lw_cal_event{[ obj.image_src ? print(' lw_has_image') : '' ]}{[ obj.repeats ? print(' lw_repeats') : '' ]}{[ obj.is_multi_day ? print(' lw_multi_day') : '' ]}{[ obj.is_first_multi_day ? print(' lw_first_multi_day') : '' ]}{[ obj.multi_day_span ? print(' lw_multi_day_span'+obj.multi_day_span) : '' ]}" data-id={{ id }}>
+        {[ if (obj.has_map) { ]}
+            <div class="lw_cal_location_link_wrapper">
+				[ <a href="#event_id/{{ id }}" data-latitude="{{ latitude }}" data-longitude="{{ longitude }}" class="lw_cal_location_link">map</a> ]
+            </div>
+        {[ } ]}
+        <div class="lw_events_location">
+            {{ location }}
+        </div> 
+        <div class="lw_events_time">{{ time }}</div> 
+        {[ if (obj.image_src) { ]}
+			<span class="lw_item_thumb">
+				<a href="{{ href }}"><img src="{{ image_src }}" alt="Event Thumbnail" class="lw_image" width="{{ thumb_width }}" height="{{ thumb_height }}" /></a>
+			</span>
+        {[ } ]}
+        <div class="lw_events_title">{{ title_link }}</div>
+        {[ if (obj.summary) { ]}
+        <div class="lw_events_summary">{{ summary }}</div>
+        {[ } ]}
+        {[ if (obj.until) { ]}
+        <div class="lw_events_until">{{ until }}</div>
+        {[ } ]}
+    </div>
+</script>
+<script id="lw_cal_scroll_link_template" type="text/template">
+    <div class="lw_cal_date_scroll">
+        <a href="#date/{{ prev_date }}"><span class="icon-2x icon-chevron-circle-left"></a>
+    </div>
+    <div class="lw_cal_date_scroll">
+        <a href="#date/{{ next_date }}"><span class="icon-2x icon-chevron-circle-right"></a>
+    </div>
+</script>
+<script id="lw_cal_date_selector_template" type="text/template">
+    <form>
+        <select class="lw_cal_date_picker form-control input-sm">
+            {{ options }}
+        </select>
+    </form>
+</script>
+<script id="lw_cal_event_detail_template" type="text/template">
+		{[ if (obj.hero_image) { ]}
+			<div id="lw_cal_hero" style="background-image:url({{hero_image}})">
+				<div>
+					<h1>{{ title }}</h1>
+					<h3>{{ date_time }}</h3>
+				</div>
+			</div>
+			<h4>{{ location }}</h4>
+		{[ } ]}
+		{[ if (!obj.hero_image) { ]}
+			<h1>{{ title }}</h1>
+            <p>
+	        {[ if (obj.date_time) { ]}
+	        {{ date_time }}
+			<br/>
+	        {[ } ]}
+	        {[ if (obj.location) { ]}
+	        {{ location }}
+			<br/>
+	        {[ } ]}
+	        {[ if (obj.is_repeating) { ]}
+			Repeats {{repeats}} {{ until }}
+			<br/>
+	        {[ } ]}
+            </p>
+		{[ } ]}
+        
+        <div id="lw_cal_event_leftcol">
+            {[ if (obj.location_latitude) { ]}
+            <div class="lw_cal_event_detail_map"></div>
+            {[ } ]}
+
+            {[ if (obj.contact_info) { ]}
+                <h3>Contact Info:</h3>
+                <p>{{ contact_info }}</p>
+            {[ } ]}
+
+            {[ if (obj.related_content) { ]}
+				<div id="lw_cal_event_related_content">
+					<h3>Related Content:</h3>
+					{{ related_content }}
+				</div>
+            {[ } ]}
+
+            {{ share_links }}
+    		
+            {{ image }}
+        
+        </div>        
+    <div id="lw_cal_event_rightcol">
+
+        {[ if (obj.summary) { ]}
+		<div class="intro">
+           {{ summary }}
+		</div>
+        {[ } ]}
+        
+        {[ if (obj.description) { ]}
+		<div class="lw_calendar_event_description">
+           {{ description }}
+		</div>
+        {[ } ]}
+
+        {[ if (obj.has_cost) { ]}
+		<div class="lw_calendar_event_cost">
+           {{ cost }}
+		</div>
+        {[ } ]}
+
+        {[ if (obj.has_registration) { ]}
+            {{ registration }}
+        {[ } ]}
+
+
+        {[ if (obj.has_tags) { ]}
+		<div class="lw_cal_event_tags">
+			{{ tags_calendar }}
+		</div>
+        {[ } ]}
+        
+		<div class="lw_cal_event_group" style="display:none;">
+			Posted to calendar: {{ group }}
+		</div>
+		<div id="event_options">
+	    {[ if (logged_in) { ]}
+	      <span class="lw_cal_event_edit">
+		    <a href="#"><span class="icon-edit icon-fw"></span> Edit this event</a>
+	      </span>
+	    {[ } ]}
+    	<span id="lw_cal_add_to_calendar">
+          	<a href="#"><span class="icon-calendar icon-fw"></span> Add to my calendar</a>
+    		<ul style="display:none">
+    			<li><span class="lw_cal_icon lw_cal_google"></span><a href="{{ add_to_google }}" target="cal">Google Calendar</a></li>
+    			<li><span class="lw_cal_icon lw_cal_yahoo"></span><a href="{{ add_to_yahoo}}" target="cal">Yahoo Calendar</a></li>
+    			<li><span class="lw_cal_icon lw_cal_ical"></span><a href="{{ ical_download_href }}" target="cal">iCal Calendar</a></li>
+    			<li><span class="lw_cal_icon lw_cal_outlook"></span><a href="{{ ical_download_href }}" target="cal">Outlook Calendar</a></li>
+    		</ul>
+    	</span>
+    </div>
+    </div>
+</script>
+</div>
+	</body>
+</html>
